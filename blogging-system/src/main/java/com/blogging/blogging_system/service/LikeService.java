@@ -2,21 +2,19 @@ package com.blogging.blogging_system.service;
 
 import org.springframework.stereotype.Service;
 
-import com.blogging.blogging_system.entity.Like;
 import com.blogging.blogging_system.entity.Post;
 import com.blogging.blogging_system.entity.User;
-import com.blogging.blogging_system.repository.LikeRepository;
 import com.blogging.blogging_system.repository.PostRepository;
 import com.blogging.blogging_system.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class LikeService{
-    private final LikeRepository likeRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public LikeService(LikeRepository likeRepository, UserRepository userRepository, PostRepository postRepository) {
-        this.likeRepository = likeRepository;
+    public LikeService(UserRepository userRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
     }
@@ -28,15 +26,12 @@ public class LikeService{
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        if (likeRepository.findByUserAndPost(user, post).isPresent()) {
+        if (post.getLikes().contains(user)) {
             throw new RuntimeException("User has already liked this post");
         }
 
-        Like like = new Like();
-        like.setUser(user);
-        like.setPost(post);
-
-        likeRepository.save(like);
+        post.getLikes().add(user);
+        postRepository.save(post);
     }
 
      public void unlikePost(Long postId, String email) {
@@ -47,20 +42,20 @@ public class LikeService{
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        Like like = likeRepository.findByUserAndPost(user, post)
-                .orElseThrow(() -> new RuntimeException("You have not liked this post"));
+        if (!post.getLikes().contains(user)) {
+            throw new RuntimeException("You have not liked this post");
+        }
 
-        likeRepository.delete(like);
+        post.getLikes().remove(user);
+        postRepository.save(post);
     }
 
-        public long getLikeCount(Long postId) {
+    public long getLikeCount(Long postId) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        return likeRepository.countByPost(post);
+        return post.getLikes().size();
     }
-
-
 
 }

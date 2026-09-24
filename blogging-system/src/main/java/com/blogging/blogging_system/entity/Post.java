@@ -1,4 +1,5 @@
 package com.blogging.blogging_system.entity;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 public class Post {
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -20,7 +21,7 @@ public class Post {
     private LocalDateTime createdAt;
     private String imageUrl;
 
-     // Many posts belong to one user
+    // Many posts belong to one user
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -35,18 +36,14 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany
-    @JoinTable(
-        name = "post_likes",
-        joinColumns = @JoinColumn(name = "post_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    @JoinTable(name = "post_likes", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private java.util.Set<User> likes = new java.util.HashSet<>();
 
-    public Post(){
+    public Post() {
 
     }
 
-      public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -62,7 +59,7 @@ public class Post {
         this.title = title;
     }
 
-      public String getContent() {
+    public String getContent() {
         return content;
     }
 
@@ -79,12 +76,12 @@ public class Post {
     }
 
     public String getImageUrl() {
-    return imageUrl;
-}
+        return imageUrl;
+    }
 
-public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public User getUser() {
         return user;

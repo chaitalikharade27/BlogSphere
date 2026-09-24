@@ -42,7 +42,9 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(jakarta.servlet.DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/auth/**", "/error", "/uploads/**").permitAll()
                         // .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/my-posts").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
                         // ADMIN only
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
@@ -64,6 +66,8 @@ public class SecurityConfig {
                                 HttpMethod.POST,
                                 "/api/posts/*/comments")
                         .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/uploads/**").permitAll()
 
                         .requestMatchers(
                                 HttpMethod.DELETE,

@@ -65,6 +65,8 @@ public class PostController {
         }
     }
 
+
+
     @GetMapping("/search")
     public List<Post> searchPosts(@RequestParam String keyword) {
         return postService.searchPosts(keyword);
@@ -77,4 +79,8 @@ public class PostController {
     return postService.getPostsByCategory(categoryId);
     }
 
+    @GetMapping("/my-posts")
+    public List<Post> getMyPosts() {
+        return postService.getMyPosts();
+    }
 }

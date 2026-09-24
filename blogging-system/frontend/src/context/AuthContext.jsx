@@ -8,19 +8,32 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Simple initialization, wait for token
         const token = localStorage.getItem('token');
         if (token) {
-            // If there was a /me endpoint, we would fetch user details here.
-            // For now, we'll just set a flag that we are authenticated.
-            setUser({ isAuthenticated: true });
+            api.get('/users/me')
+                .then(res => {
+                    setUser(res.data);
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
+                    setUser(null);
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
     }, []);
 
-    const login = (token) => {
+    const login = async (token) => {
         localStorage.setItem('token', token);
-        setUser({ isAuthenticated: true });
+        try {
+            const res = await api.get('/users/me');
+            setUser(res.data);
+        } catch (error) {
+            setUser({ isAuthenticated: true });
+        }
     };
 
     const logout = () => {

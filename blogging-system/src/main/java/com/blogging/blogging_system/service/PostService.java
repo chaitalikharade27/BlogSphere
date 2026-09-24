@@ -15,8 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -192,5 +194,10 @@ public class PostService {
     public List<Post> getPostsByCategory(Long categoryId) {
 
         return postRepository.findByCategoryId(categoryId);
+    }
+
+    public List<Post> getMyPosts() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return postRepository.findByUserEmail(email);
     }
 }

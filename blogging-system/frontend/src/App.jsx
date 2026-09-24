@@ -8,6 +8,8 @@ import PostDetail from './pages/PostDetail';
 import Editor from './pages/Editor';
 import Profile from './pages/Profile';
 
+import AdminDashboard from './pages/AdminDashboard';
+
 function App() {
   return (
     <AuthProvider>
@@ -23,6 +25,7 @@ function App() {
               <Route path="/create" element={<Editor />} />
               <Route path="/edit/:id" element={<Editor />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </main>
         </div>

@@ -22,6 +22,11 @@ export default function Navbar() {
                 <div className="nav-links">
                     {user ? (
                         <>
+                            {user.role === 'ADMIN' && (
+                                <Link to="/admin" className="nav-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 'bold' }}>
+                                    <span>🛡️</span> Admin
+                                </Link>
+                            )}
                             <Link to="/create" className="nav-link" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <PenSquare size={18} /> Write
                             </Link>
